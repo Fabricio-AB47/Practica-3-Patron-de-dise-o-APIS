@@ -1,0 +1,32 @@
+{
+  "name": "practica-2",
+  "version": "1.0.0",
+  "main": "backend/index.js",
+  "scripts": {
+    "dev": "nodemon backend/index.js",
+    "start": "node backend/index.js",
+    "frontend": "npm start --prefix frontend",
+    "frontend:build": "npm run build --prefix frontend",
+    "start:all": "concurrently \"npm:dev\" \"npm:frontend\"",
+    "seed": "node backend/seed.js",
+    "seed:append": "cross-env SEED_MODE=append node backend/seed.js",
+    "seed:reset": "cross-env SEED_MODE=reset node backend/seed.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mongoose": "^8.19.1",
+    "morgan": "^1.10.1"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "cross-env": "^7.0.3",
+    "nodemon": "^3.1.10"
+  }
+}

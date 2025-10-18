@@ -1,0 +1,136 @@
+<div class="container my-4">
+  <!-- Alerts -->
+  <div *ngIf="message" class="alert alert-success alert-dismissible fade show" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" aria-label="Close" (click)="message=null"></button>
+  </div>
+  <div *ngIf="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+    {{ error }}
+    <button type="button" class="btn-close" aria-label="Close" (click)="error=null"></button>
+  </div>
+
+  <div class="row g-3">
+    <!-- Formulario -->
+    <div class="col-md-4">
+      <div class="card shadow-soft">
+        <div class="card-header gradient-header text-dark">
+          <strong><i class="bi bi-person-badge me-2"></i>{{ empleadoService.selectedEmpleado._id ? 'Editar Empleado' : 'Registro de Nuevo Empleado' }}</strong>
+        </div>
+        <div class="card-body">
+          <form #f="ngForm" (ngSubmit)="empleadoService.selectedEmpleado._id ? update(f) : addEmpleado(f)">
+            <div class="mb-3">
+              <label class="form-label"><i class="bi bi-person me-1 text-muted"></i>Nombre</label>
+              <input class="form-control form-control-lg" placeholder="Ingrese su nombre" name="nombre"
+                     [(ngModel)]="empleadoService.selectedEmpleado.nombre" required minlength="2">
+              <div class="invalid-feedback d-block" *ngIf="f.submitted && !empleadoService.selectedEmpleado.nombre">
+                El nombre es requerido
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label"><i class="bi bi-briefcase me-1 text-muted"></i>Cargo</label>
+              <input class="form-control form-control-lg" placeholder="Ingrese su cargo" name="cargo"
+                     [(ngModel)]="empleadoService.selectedEmpleado.cargo" required minlength="2">
+              <div class="invalid-feedback d-block" *ngIf="f.submitted && !empleadoService.selectedEmpleado.cargo">
+                El cargo es requerido
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label"><i class="bi bi-building me-1 text-muted"></i>Departamento</label>
+              <input class="form-control form-control-lg" placeholder="Ingrese su departamento" name="departamento"
+                     [(ngModel)]="empleadoService.selectedEmpleado.departamento" required minlength="2">
+              <div class="invalid-feedback d-block" *ngIf="f.submitted && !empleadoService.selectedEmpleado.departamento">
+                El departamento es requerido
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label"><i class="bi bi-cash-coin me-1 text-muted"></i>Sueldo</label>
+              <input class="form-control form-control-lg" type="number" min="0" step="0.01" placeholder="Ingrese su sueldo" name="sueldo"
+                     [(ngModel)]="empleadoService.selectedEmpleado.sueldo" required>
+              <div class="invalid-feedback d-block" *ngIf="f.submitted && (empleadoService.selectedEmpleado.sueldo==null)">
+                El sueldo es requerido
+              </div>
+            </div>
+
+            <div class="d-flex gap-3">
+              <button class="btn btn-primary btn-pill" type="submit" [disabled]="isSaving">
+                <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-1" role="status" aria-hidden="true"></span>
+                <i class="bi bi-check2-circle me-1"></i>{{ empleadoService.selectedEmpleado._id ? 'Actualizar' : 'Crear' }}
+              </button>
+              <button class="btn btn-outline-secondary btn-pill" type="button" (click)="resetForm(f)" [disabled]="isSaving">
+                <i class="bi bi-x-circle me-1"></i>Limpiar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabla -->
+    <div class="col-md-8">
+      <div class="card shadow-soft">
+        <div class="card-header gradient-header d-flex justify-content-between align-items-center">
+          <div>
+            <strong><i class="bi bi-people me-2"></i>Empleados</strong>
+            <small class="text-muted ms-2">(backend: <span [class.text-success]="backendConnected" [class.text-danger]="!backendConnected">{{ backendConnected ? 'OK' : 'OFF' }}</span>)</small>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <div class="small text-muted d-none d-md-block">Total: <span class="badge bg-secondary-subtle text-dark">{{ empleadoService.empleados.length }}</span></div>
+            <div class="input-group input-group-sm search-group">
+              <span class="input-group-text"><i class="bi bi-search"></i></span>
+              <input class="form-control" placeholder="Buscar (nombre, cargo, depto)" [(ngModel)]="search">
+              <button class="btn btn-outline-secondary" type="button" (click)="getEmpleados()" [disabled]="isLoading" title="Refrescar">
+                <span *ngIf="isLoading" class="spinner-border spinner-border-sm"></span>
+                <i *ngIf="!isLoading" class="bi bi-arrow-repeat"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-striped mb-0 align-middle">
+              <thead class="table-light sticky-top shadow-sm">
+                <tr>
+                  <th (click)="setSort('nombre')" role="button">Nombre <i class="bi ms-1" [ngClass]="{'bi-caret-up-fill': sortField==='nombre' && sortAsc, 'bi-caret-down-fill': sortField==='nombre' && !sortAsc}"></i></th>
+                  <th (click)="setSort('cargo')" role="button">Cargo <i class="bi ms-1" [ngClass]="{'bi-caret-up-fill': sortField==='cargo' && sortAsc, 'bi-caret-down-fill': sortField==='cargo' && !sortAsc}"></i></th>
+                  <th (click)="setSort('departamento')" role="button">Departamento <i class="bi ms-1" [ngClass]="{'bi-caret-up-fill': sortField==='departamento' && sortAsc, 'bi-caret-down-fill': sortField==='departamento' && !sortAsc}"></i></th>
+                  <th (click)="setSort('sueldo')" role="button" class="text-end">Sueldo <i class="bi ms-1" [ngClass]="{'bi-caret-up-fill': sortField==='sueldo' && sortAsc, 'bi-caret-down-fill': sortField==='sueldo' && !sortAsc}"></i></th>
+                  <th class="text-center" style="width: 160px;">Operaciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngIf="!isLoading; else loadingRows">
+                  <tr *ngFor="let e of filteredEmpleados()" class="row-hover">
+                    <td>{{ e.nombre }}</td>
+                    <td>{{ e.cargo }}</td>
+                    <td>{{ e.departamento }}</td>
+                    <td class="text-end">{{ e.sueldo | currency:'USD':'symbol':'1.0-2' }}</td>
+                    <td class="text-center">
+                      <button class="btn btn-sm btn-outline-primary me-2 btn-pill" (click)="edit(e)" title="Editar">
+                        <i class="bi bi-pencil-square"></i> <span class="d-none d-sm-inline ms-1">Editar</span>
+                      </button>
+                      <button class="btn btn-sm btn-danger btn-pill" (click)="remove(e._id)" title="Eliminar">
+                        <i class="bi bi-trash"></i> <span class="d-none d-sm-inline ms-1">Eliminar</span>
+                      </button>
+                    </td>
+                  </tr>
+                  <tr *ngIf="filteredEmpleados().length === 0">
+                    <td colspan="5" class="text-center text-muted py-4">Sin resultados</td>
+                  </tr>
+                </ng-container>
+                <ng-template #loadingRows>
+                  <tr *ngFor="let s of [0,1,2,3]">
+                    <td colspan="5" class="py-3"><div class="skeleton-line"></div></td>
+                  </tr>
+                </ng-template>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

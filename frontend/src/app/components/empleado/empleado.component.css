@@ -1,0 +1,20 @@
+/* Presentación mejorada */
+.shadow-soft { box-shadow: 0 8px 24px rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.05); }
+.gradient-header { background: linear-gradient(90deg, #eaeefc, #e6f3ff); border-bottom: 1px solid rgba(0,0,0,0.05); }
+.btn-pill { border-radius: 999px; padding-inline: 1rem; }
+.table thead th { user-select: none; }
+.table tbody td, .table thead th { vertical-align: middle; }
+.row-hover:hover { background-color: rgba(0,0,0,0.03); }
+.search-group .form-control { min-width: 220px; }
+.skeleton-line { height: 12px; width: 100%; background: linear-gradient(90deg,#eee,#f6f6f6,#eee); background-size: 200% 100%; animation: shimmer 1.2s infinite; border-radius: 8px; }
+@keyframes shimmer { 0% { background-position: 200% 0 } 100% { background-position: -200% 0 } }
+
+/* Row hover */
+tbody tr:hover { background: rgba(0,0,0,0.03); }
+
+/* small icon spacing */
+.btn .bi { vertical-align: -.125em; margin-right: .25rem; }
+
+@media (max-width: 767px) {
+	.col-md-4, .col-md-8 { flex: 0 0 100%; max-width: 100%; }
+}
