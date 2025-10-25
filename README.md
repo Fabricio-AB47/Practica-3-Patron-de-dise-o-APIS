@@ -58,3 +58,40 @@ node backend/seed.js
 Esto vaciará la colección `empleados` y añadirá tres documentos de ejemplo (Ana, Luis, María).
 
 3. En MongoDB Compass navega a la base `usuarios_db` -> colección `empleados` para ver/editar/eliminar documentos.
+
+GraphQL
+-------
+
+He integrado un endpoint GraphQL en el backend en `/graphql`.
+
+1. Asegúrate el backend está corriendo (npm run dev). El endpoint GraphiQL estará en:
+
+	 http://localhost:3000/graphql
+
+2. Ejemplos de consultas (GraphiQL):
+
+Query (listar empleados):
+
+```
+{
+	empleados {
+		_id
+		nombre
+		sueldo
+		cargo
+	}
+}
+```
+
+Mutation (crear empleado):
+
+```
+mutation {
+	createEmpleado(input: { nombre: "Carlos Ruiz", sueldo: 1200, cargo: "Dev", departamento: "TI" }) {
+		_id
+		nombre
+	}
+}
+```
+
+Nota: GraphQL usa la colección de MongoDB si está disponible; si por alguna razón la BD no responde, hay datos de ejemplo en memoria.

@@ -1,7 +1,12 @@
 <nav class="navbar bg-body-tertiary">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Gestión de Empleados</a>
+    <div class="d-flex gap-2">
+      <button class="btn btn-sm btn-outline-primary" (click)="view='empleados'">Empleados</button>
+      <button class="btn btn-sm btn-outline-primary" (click)="view='departamentos'">Departamentos</button>
+    </div>
   </div>
 </nav>
-<app-empleado></app-empleado>
+<app-empleado *ngIf="view === 'empleados'"></app-empleado>
+<app-departamento *ngIf="view === 'departamentos'"></app-departamento>
 

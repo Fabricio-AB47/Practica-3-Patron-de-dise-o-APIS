@@ -1,0 +1,53 @@
+<div class="container my-4">
+  <div *ngIf="message" class="alert alert-success">{{ message }}</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <div class="card mb-3">
+    <div class="card-header"><strong>Crear Departamento</strong></div>
+    <div class="card-body">
+      <form #f="ngForm" (ngSubmit)="submit(f)">
+        <div class="mb-3">
+          <label class="form-label">Nombre</label>
+          <input name="nombre" class="form-control" required [(ngModel)]="selected.nombre" />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Slogan</label>
+          <input name="slogan" class="form-control" [(ngModel)]="selected.slogan" />
+        </div>
+        <button class="btn btn-primary" type="submit" [disabled]="saving">
+          <i class="bi bi-save"></i> Crear
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <strong>Departamentos</strong>
+      <button class="btn btn-sm btn-outline-secondary" (click)="load()" [disabled]="loading">
+        <i class="bi bi-arrow-clockwise"></i>
+      </button>
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Nombre</th>
+              <th>Slogan</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let d of departamentos">
+              <td>{{ d.nombre }}</td>
+              <td>{{ d.slogan }}</td>
+            </tr>
+            <tr *ngIf="!loading && departamentos.length === 0">
+              <td colspan="2" class="text-center text-muted py-4">Sin departamentos</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

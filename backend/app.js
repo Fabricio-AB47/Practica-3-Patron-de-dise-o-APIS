@@ -4,6 +4,9 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 
 const app = express();
+// GraphQL
+const { graphqlHTTP } = require('express-graphql');
+const graphqlSchema = require('./graphql/schema');
 
 // settings
 app.set('puerto', process.env.PORT || 3000);
@@ -30,5 +33,14 @@ app.get('/health/db', (_req, res) => {
   });
 });
 app.use('/api/empleados', require('./routes/empleados.routes'));
+
+// mount GraphQL endpoint at /graphql
+app.use(
+  '/graphql',
+  graphqlHTTP({
+    schema: graphqlSchema,
+    graphiql: true
+  })
+);
 
 module.exports = app;
