@@ -11,7 +11,8 @@
     "seed": "node backend/seed.js",
     "seed:append": "cross-env SEED_MODE=append node backend/seed.js",
     "seed:reset": "cross-env SEED_MODE=reset node backend/seed.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm test --prefix pda05-pruebas-unitarias",
+    "test:pda05": "npm test --prefix pda05-pruebas-unitarias"
   },
   "keywords": [],
   "author": "",

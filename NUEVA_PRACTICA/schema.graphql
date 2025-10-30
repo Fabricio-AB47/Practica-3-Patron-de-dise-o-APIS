@@ -1,0 +1,11 @@
+type Departamentos @model {
+  id: ID!
+  nombre: String!
+  gerente: [Gerente]
+}
+
+type Gerente @model {
+  id: ID!
+  nombre: String!
+  experiencia:  Int!
+}

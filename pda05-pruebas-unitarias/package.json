@@ -1,0 +1,17 @@
+{
+  "name": "pda05-pruebas-unitarias",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "scripts": {
+    "dev": "node src/app.js",
+    "test": "mocha tests/api.test.js --exit"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "mocha": "^10.6.0",
+    "supertest": "^7.0.0"
+  }
+}
